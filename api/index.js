@@ -17,7 +17,7 @@ const jwtSecret = process.env.JWT_SECRET;
 const bcryptSalt = bcrypt.genSaltSync(10);
 
 const app = express();
-app.use("/uploads/", express.static(__dirname + "/uploads"));
+app.use("/api/uploads/", express.static(__dirname + "/uploads"));
 app.use(express.json());
 app.use(cookieParser());
 console.log("green");
@@ -44,7 +44,7 @@ async function getUserDataFromRequest(req) {
 //   res.json("test ok");
 // });
 
-app.get("/messages/:userId", async (req, res) => {
+app.get("/api/messages/:userId", async (req, res) => {
   const { userId } = req.params;
   const userData = await getUserDataFromRequest(req);
   const ourUserId = userData.userId;
@@ -55,12 +55,12 @@ app.get("/messages/:userId", async (req, res) => {
   res.json(messages);
 });
 
-app.get("/people", async (req, res) => {
+app.get("/api/people", async (req, res) => {
   const users = await User.find({}, { _id: 1, username: 1 });
   res.json(users);
 });
 
-app.get("/profile", (req, res) => {
+app.get("/api/profile", (req, res) => {
   const token = req.cookies?.token;
   if (token) {
     jwt.verify(token, jwtSecret, {}, (err, userData) => {
@@ -72,7 +72,7 @@ app.get("/profile", (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
   const foundUser = await User.findOne({ username });
 
@@ -93,11 +93,11 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/logout", (req, res) => {
+app.post("/api/logout", (req, res) => {
   res.cookie("token", "", { sameSite: "none", secure: true }).json("ok");
 });
 
-app.post("/register", async (req, res) => {
+app.post("/api/register", async (req, res) => {
   const { username, password } = req.body;
   try {
     const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
