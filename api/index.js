@@ -21,13 +21,7 @@ app.use("/api/uploads/", express.static(__dirname + "/uploads"));
 app.use(express.json());
 app.use(cookieParser());
 console.log("green");
-app.use(
-  cors({
-    credentials: true,
-    origin: process.env.CLIENT_URL,
-    AllowAll: true,
-  })
-);
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 async function getUserDataFromRequest(req) {
   return new Promise((resolve, reject) => {
