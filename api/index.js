@@ -23,7 +23,7 @@ app.use(cookieParser());
 console.log("green");
 app.use(
   cors({
-    credentials: true,
+    credentials: false,
     origin: process.env.CLIENT_URL,
   })
 );
